@@ -1,0 +1,4 @@
+main/SparkJob.class
+models/FastaObject.class
+fastaParser/fastaParser.class
+cassandra/CassandraConnection.class

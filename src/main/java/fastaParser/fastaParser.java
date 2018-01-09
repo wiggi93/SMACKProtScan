@@ -7,16 +7,30 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
+
+import com.datastax.spark.connector.cql.CassandraConnector;
+
 import cassandra.CassandraConnection;
 import models.FastaObject;
 
 
 public class fastaParser {
 
+	public static JavaSparkContext sparkContext;
+	
 	public static void main(String[] args) {
 
-
-		File test = new File("C:\\Users\\Philip\\Desktop\\Arbeit\\fasta1k.fasta");
+		SparkConf conf = new SparkConf().setAppName("SMACKProtScan").setMaster("local[5]");
+		sparkContext = new JavaSparkContext(conf);
+		sparkContext.setLogLevel("ERROR");
+		
+		CassandraConnector connector = CassandraConnector.apply(conf);
+        CassandraConnection cassandraConnection = new CassandraConnection(sparkContext, connector);
+        cassandraConnection.createDB();
+        
+		File test = new File("/Users/philipwiegratz/Desktop/Workspace SpeL/fasta.fasta");
 		FileReader fr = null;
 		try {
 			fr = new FileReader(test);
@@ -38,13 +52,11 @@ public class fastaParser {
 					if (!firstLine) {
 						count++;
 						System.out.println("Count : "+count);
-						object.setFirstAminos();
 //						if (!cassandra.aminoLookup(object)){
 						if (true) {
 							countNew++;
 							System.out.println("CountNew : "+countNew);
-							System.out.println((liste.size()));
-	//						cassandra.writeToCassandra(object);
+							liste.add(object);
 						}
 					}
 					object= new FastaObject(temp, "");
@@ -52,14 +64,20 @@ public class fastaParser {
 				} else {
 					object.setAmino(object.getAmino() + temp.trim());
 				}
-
+				if (liste.size()>=500) {
+					cassandraConnection.writeListToCassandra(liste);
+					liste.clear();
+				}
+				
+				
 			}
+		
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		cassandra.writeToCassandra(object);
-//		cassandra.closeSession();
-//		cassandra.closeCluster();
+		cassandraConnection.writeListToCassandra(liste);
+		cassandraConnection.closeCluster();
 		System.out.println(System.currentTimeMillis()-time);
 	}
 

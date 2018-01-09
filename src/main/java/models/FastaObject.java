@@ -1,23 +1,44 @@
 package models;
 
-public class FastaObject {
+import java.io.Serializable;
+import java.util.UUID;
 
+import com.datastax.driver.core.utils.UUIDs;
+
+public class FastaObject implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public UUID uuid;
 	public String db;
 	public String accession;
 	public String description;
 	public String amino;
-//	public int hash;
-	public String firstAminos;
+	public String firstaminos;
+	public int randompartition;
 
-	public String getFirstAminos() {
-		return firstAminos;
+	
+	public UUID getUuid() {
+		return uuid;
 	}
 
-	public void setFirstAminos() {
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+	
+	public String getfirstaminos() {
+		return firstaminos;
+	}
+
+	public void setfirstaminos() {
 		if (this.amino.length()>=6)
-			this.firstAminos = this.amino.substring(0, 6);
+			this.firstaminos = this.amino.substring(0, 6);
+		else if (this.amino.length() > 0)
+			this.firstaminos=this.amino.substring(0, this.amino.length()-1);
 		else 
-			this.firstAminos=this.amino.substring(0, this.amino.length());
+			this.firstaminos="-";
 		
 	}
         
@@ -26,13 +47,25 @@ public class FastaObject {
             this.amino=null;
             this.db=null;
             this.description=null;
-            this.firstAminos=null;
+            this.firstaminos=null;
+            this.uuid=null;
+            this.randompartition=(int)(Math.random()*4);
         }
+	public int getRandompartition() {
+			return randompartition;
+		}
+
+		public void setRandompartition(int randompartition) {
+			this.randompartition = randompartition;
+		}
+
 	public FastaObject(String description, String amino) {
 		int count=0;
 		this.description=description;
 		this.amino=amino;
-		
+		this.uuid = UUIDs.timeBased();
+		setfirstaminos();
+		this.randompartition=(int)(Math.random()*4);
 
 		for (int i=0; i<description.length();i++) {
 			if (description.charAt(i)=='|'){
@@ -58,14 +91,6 @@ public class FastaObject {
 		}
 
 	}
-
-//	public int getHash() {
-//		return hash;
-//	}
-//
-//	public void setHash(int hash) {
-//		this.hash = hash;
-//	}
 
 	public String getDb() {
 		return db;
