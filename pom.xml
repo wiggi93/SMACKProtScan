@@ -5,10 +5,73 @@
 	<artifactId>de.ovgu</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+
+<build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <finalName>SparkTest</finalName>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <archive>
+                                <manifest>
+                                    <mainClass>fastaParser.SparkJob</mainClass>
+                                </manifest>
+                            </archive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-install-plugin</artifactId>
+    <version>2.5.2</version>
+  </plugin>
+</plugins>
+    </build>
+
 	<dependencies>
-	<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
-
-
+	
+		<dependency>
+    			<groupId>commons-codec</groupId>
+   			<artifactId>commons-codec</artifactId>
+   			<version>1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.11</artifactId>
+			<version>0.10.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+			<version>0.10.2.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.datastax.spark</groupId>
 			<artifactId>spark-cassandra-connector_2.10</artifactId>
@@ -20,14 +83,15 @@
 			<version>1.6.0-M1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming_2.10</artifactId>
-			<version>2.2.0</version>
+		    <groupId>org.apache.spark</groupId>
+		    <artifactId>spark-streaming_2.11</artifactId>
+		    <version>2.3.1</version>
+		    <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_2.10</artifactId>
-			<version>2.2.0</version>
+			<version>2.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.spark</groupId>
@@ -44,7 +108,21 @@
 			<artifactId>spark-network-common_2.11</artifactId>
 			<version>2.1.0</version>
 		</dependency>
-		
+<dependency>
+    <groupId>org.apache.spark</groupId>
+    <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+    <version>2.3.1</version>
+</dependency>
+		<dependency>
+    			<groupId>org.scala-lang</groupId>
+    			<artifactId>scala-xml</artifactId>
+    			<version>2.11.0-M4</version>
+		</dependency>
+		<dependency>
+    			<groupId>org.apache.spark</groupId>
+    			<artifactId>spark-kvstore_2.11</artifactId>
+    			<version>2.3.1</version>
+		</dependency>
 
 	</dependencies>
 

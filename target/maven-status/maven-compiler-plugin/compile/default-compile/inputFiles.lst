@@ -1,4 +1,4 @@
-/Users/philipwiegratz/Desktop/Workspace SpeL/SMACKProtScan/src/main/java/cassandra/CassandraConnection.java
-/Users/philipwiegratz/Desktop/Workspace SpeL/SMACKProtScan/src/main/java/models/FastaObject.java
-/Users/philipwiegratz/Desktop/Workspace SpeL/SMACKProtScan/src/main/java/main/SparkJob.java
-/Users/philipwiegratz/Desktop/Workspace SpeL/SMACKProtScan/src/main/java/fastaParser/fastaParser.java
+/Users/philipwiegratz/Desktop/WorkspaceSpeL/SMACKProtScan/src/main/java/models/FastaObject.java
+/Users/philipwiegratz/Desktop/WorkspaceSpeL/SMACKProtScan/src/main/java/fastaParser/SparkJob.java
+/Users/philipwiegratz/Desktop/WorkspaceSpeL/SMACKProtScan/src/main/java/fastaParser/fastaParser.java
+/Users/philipwiegratz/Desktop/WorkspaceSpeL/SMACKProtScan/src/main/java/cassandra/CassandraConnection.java

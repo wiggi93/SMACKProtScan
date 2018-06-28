@@ -1,4 +1,7 @@
-main/SparkJob.class
 models/FastaObject.class
+fastaParser/SparkJob$2$1.class
+fastaParser/SparkJob.class
+fastaParser/SparkJob$1.class
 fastaParser/fastaParser.class
 cassandra/CassandraConnection.class
+fastaParser/SparkJob$2.class

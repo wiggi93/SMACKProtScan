@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import com.datastax.driver.core.utils.UUIDs;
 
+import fastaParser.fastaParser;
+
 public class FastaObject implements Serializable{
 
 	/**
@@ -49,7 +51,7 @@ public class FastaObject implements Serializable{
             this.description=null;
             this.firstaminos=null;
             this.uuid=null;
-            this.randompartition=(int)(Math.random()*4);
+            this.randompartition=(int)(Math.random()*fastaParser.partitionCount-1);
         }
 	public int getRandompartition() {
 			return randompartition;
@@ -65,7 +67,7 @@ public class FastaObject implements Serializable{
 		this.amino=amino;
 		this.uuid = UUIDs.timeBased();
 		setfirstaminos();
-		this.randompartition=(int)(Math.random()*4);
+		this.randompartition=(int)(Math.random()*fastaParser.partitionCount-1);
 
 		for (int i=0; i<description.length();i++) {
 			if (description.charAt(i)=='|'){

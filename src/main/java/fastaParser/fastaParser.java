@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.SparkSession;
 
 import com.datastax.spark.connector.cql.CassandraConnector;
 
@@ -18,31 +20,45 @@ import models.FastaObject;
 
 public class fastaParser {
 
-	public static JavaSparkContext sparkContext;
+	public static SparkContext sparkContext;
+	public static JavaSparkContext javaSparkContext;
+	public static int partitionCount = 1000;
 	
 	public static void main(String[] args) {
-
-		SparkConf conf = new SparkConf().setAppName("SMACKProtScan").setMaster("local[5]");
-		sparkContext = new JavaSparkContext(conf);
-		sparkContext.setLogLevel("ERROR");
 		
-		CassandraConnector connector = CassandraConnector.apply(conf);
-        CassandraConnection cassandraConnection = new CassandraConnection(sparkContext, connector);
-        cassandraConnection.createDB();
+		SparkConf conf = new SparkConf().setAppName("SMACKProtScan");
+//		SparkSession session = SparkSession.builder()
+//				.appName("SMACKProtScan")
+//				.config(conf)
+//				.getOrCreate();
+//		
+//		sparkContext = session.sparkContext();
+//		javaSparkContext = JavaSparkContext.fromSparkContext(sparkContext);
+		
+		sparkContext = new SparkContext(conf);
+		javaSparkContext = new JavaSparkContext(sparkContext);
+		javaSparkContext.setLogLevel("ERROR");
+		
+//		CassandraConnector connector = CassandraConnector.apply(conf);
+//        CassandraConnection cassandraConnection = new CassandraConnection(javaSparkContext, connector);
+//        cassandraConnection.createDB();
         
-		File test = new File("/Users/philipwiegratz/Desktop/Workspace SpeL/fasta.fasta");
+		File test = new File("testfasta.fasta");
+        
+//        File test = new File("/Users/philipwiegratz/Desktop/WorkspaceSpeL/MG_BG_BielefeldAggregated.fasta");
+        
 		FileReader fr = null;
 		try {
 			fr = new FileReader(test);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
 		BufferedReader br = new BufferedReader(fr);
-
 		String temp= "";
 		FastaObject object=null;
 		boolean firstLine=true;
-		int count = 0, countNew = 0;
+		int count = 0;
 		double time = System.currentTimeMillis();
 		ArrayList<FastaObject> liste = new ArrayList<FastaObject>();
 		
@@ -52,12 +68,7 @@ public class fastaParser {
 					if (!firstLine) {
 						count++;
 						System.out.println("Count : "+count);
-//						if (!cassandra.aminoLookup(object)){
-						if (true) {
-							countNew++;
-							System.out.println("CountNew : "+countNew);
-							liste.add(object);
-						}
+						liste.add(object);
 					}
 					object= new FastaObject(temp, "");
 					firstLine=false;
@@ -65,19 +76,18 @@ public class fastaParser {
 					object.setAmino(object.getAmino() + temp.trim());
 				}
 				if (liste.size()>=500) {
-					cassandraConnection.writeListToCassandra(liste);
+//					cassandraConnection.writeListToCassandra(liste);
 					liste.clear();
 				}
-				
-				
 			}
-		
+		liste.add(object);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		cassandraConnection.writeListToCassandra(liste);
-		cassandraConnection.closeCluster();
+		
+//		cassandraConnection.writeListToCassandra(liste);
+//		cassandraConnection.closeCluster();
 		System.out.println(System.currentTimeMillis()-time);
 	}
 
